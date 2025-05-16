@@ -1,0 +1,40 @@
+#ifndef CUB3D_H
+#define CUB3D_H
+
+# include "get_next_line.h"
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include <fcntl.h>
+# include <mlx.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+
+
+typedef struct s_ppos
+{
+    int height;
+    int width;
+} t_ppos;
+
+typedef struct s_game
+{
+    int height;
+    int width;
+    char **map;
+    t_ppos player_pos;
+}  t_game;
+
+
+char	**ft_split(char const *s, char c);
+int read_map(char *file, t_game *game);
+int check_wall(char **map);
+void process_map_data(char *buff, t_game *game);
+int check_map_extention(char *str);
+
+
+
+
+
+#endif
