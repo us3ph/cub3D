@@ -29,9 +29,11 @@ typedef struct s_game
 
 char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
-int check_wall(char **map);
+int check_map_wall(char **map);
 void process_map_data(char *buff, t_game *game);
 int check_map_extention(char *str);
+void err(char *str);
+int check_map_chars(char **map);
 
 
 
