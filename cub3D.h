@@ -23,17 +23,38 @@ typedef struct s_game
     int height;
     int width;
     char **map;
+    char **hmap;
     t_ppos player_pos;
 }  t_game;
 
+typedef struct s_map_colors
+{
+    char *identifier;
+    char *RGB;
+} t_map_colors;
+
+typedef struct s_path
+{
+    char *identifier;
+    char *path;
+} t_path;
+typedef struct s_map_elem
+{
+    t_path *path;
+    t_map_colors *colors;
+} t_map_elem;
 
 char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
-int check_map_wall(char **map);
+// int check_map_wall(char **map);
 void process_map_data(char *buff, t_game *game);
 int check_map_extention(char *str);
 void err(char *str);
 int check_map_chars(char **map);
+int get_map_height(char **map);
+void free_map(char **map);
+void cleanup_game(t_game *game);
+int	check_map_wall(char **map, char **hmap);
 
 
 
