@@ -32,7 +32,7 @@ int	read_map(char *file, t_game *game)
 		return (1);
 	return ((process_map_data(buff, game)), free(buff), 0);
 }
-int	check_map_wall(char **map, char **hmap)
+int	check_map_wall(char **hmap, char **map)
 {
 	int	i;
 	int	j;
@@ -40,21 +40,21 @@ int	check_map_wall(char **map, char **hmap)
     int map_height;
 
 	i = 0;
-	if (!map || !map[0])
+	if (!hmap || !hmap[0])
 		return (1);
-    while(map[i])
+    while(hmap[i])
     {
-        if(map[i][0] == '1')
+        if(hmap[i][0] == '1')
         {
-            hmap = &map[i];
+            map = &hmap[i];
             break;
         }
         i++;
     }
     i = 0;
-    // while(hmap[i]) // check map 1
+    // while(map[i]) // check map 1
     // {
-    //     printf("%s\n", hmap[i]);
+    //     printf("%s\n", map[i]);
     //     i++;
     // }
 	raw_len = ft_strlen(map[0]);
@@ -234,63 +234,53 @@ int validate_map_char(char **map)
     }
     return(0);
 }
-int validate_map_elem(char **map)
+int validate_map_elem(char **hmap)
 {
     int i;
     int j;
 
     t_map_elem map_elem;
-    // t_path path;
+    t_path path;
+    map_elem.path = &path;
     i = 0;
-    while(map[i])
+    while(hmap[i])
     {
-        if(map[i][0] == '\n')
+        if(hmap[i][0] == '\n')
         {
             i++;
             continue;
         }
         j = 0;
-        if(map[i][j] == 'N' && map[i][j + 1] == 'O')
+        if(!ft_strncmp(&hmap[i][j], "NO ",3))
         {
-            map_elem.path->identifier = "NO";
-            j += 3;
-            while(map[i][j])
-                map_elem.path->path = &map[i][j++];
+            ft_strncpy(map_elem.path->identifier, &hmap[i][j], 2);
+            while(hmap[i][j])
+            {
+                if(hmap[i][j] == ' ' || hmap[i][j] == '\t')
+                j++;
+            }
+             ft_strncpy(map_elem.path->path, &hmap[i][j], ft_strlen(&hmap[i][j]));
+             printf("path %s\n", map_elem.path->path);
         }
-        else if(map[i][j] == 'S' && map[i][j] == 'O')
+        else if(!ft_strncmp(&hmap[i][j], "SO ",3))
         {
-            map_elem.path->identifier = "SO";
-            j += 3;
-            while(map[i][j])
-                map_elem.path->path = &map[i][j++];
+
         }
-        else if(map[i][j] == 'E' && map[i][j + 1] == 'A')
+        else if(!ft_strncmp(&hmap[i][j], "EA ",3))
         {
-            map_elem.path->identifier = "EA";
-            j += 3;
-            while(map[i][j])
-                map_elem.path->path = &map[i][j++];
+
         }
-        else if(map[i][j] == 'W' && map[i][j] == 'E')
+        else if(!ft_strncmp(&hmap[i][j], "WE ",3))
         {
-            map_elem.path->identifier = "WE";
-            j += 3;
-            while(map[i][j])
-                map_elem.path->path = &map[i][j++];
+
         }
-        else if(map[i][j] == 'C')
+        else if(!ft_strncmp(&hmap[i][j], "C ",2))
         {
-            map_elem.colors->identifier = "C";
-            j += 2;
-            while(map[i][j])
-                map_elem.colors->RGB = &map[i][j++];
+
         }
-        else if(map[i][j] == 'F')
+        if(!ft_strncmp(&hmap[i][j], "F ",2))
         {
-            map_elem.colors->identifier = "F";
-            j += 2;
-            while(map[i][j])
-                map_elem.colors->RGB = &map[i][j++];
+
         }
         else
             return(1);
@@ -300,18 +290,18 @@ int validate_map_elem(char **map)
 }
 int check_map_chars(char **map)
 {
-    int player_count;
-    t_map_colors map_colors;
+    // int player_count;
+    // t_map_colors map_colors;
 
     if(!map || !map[0])
         return(1);
     validate_map_elem(map);
-    convert_space_to_zero(map);
-    if(validate_map_char(map))
-        return(1);
-    player_count = count_player(map);
-    if(player_count != 1)
-        return(1);
+    // convert_space_to_zero(map);
+    // if(validate_map_char(map))
+    //     return(1);
+    // player_count = count_player(map);
+    // if(player_count != 1)
+    //     return(1);
     return (0);
 }
 

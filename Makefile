@@ -10,7 +10,7 @@ MLX_FLAGS = -Lminilibx-linux -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 
 MLX_INCLUDE = -Iminilibx-linux
 
-SRC = ft_split.c get_next_line.c get_next_line_utils.c read_map.c main.c\
+SRC = ft_split.c get_next_line.c get_next_line_utils.c read_map.c main.c utils.c\
 
 OBJ = $(SRC:.c=.o)
 

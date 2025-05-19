@@ -27,10 +27,17 @@ typedef struct s_game
     t_ppos player_pos;
 }  t_game;
 
+typedef struct s_rgb_num
+{
+    int rgb1;
+    int rgb2;
+    int rgb3;
+} t_rgb_num;
+
 typedef struct s_map_colors
 {
     char *identifier;
-    char *RGB;
+    t_rgb_num *rgb;
 } t_map_colors;
 
 typedef struct s_path
@@ -54,7 +61,10 @@ int check_map_chars(char **map);
 int get_map_height(char **map);
 void free_map(char **map);
 void cleanup_game(t_game *game);
-int	check_map_wall(char **map, char **hmap);
+int	check_map_wall(char **hmap, char **map);
+int	ft_strncmp(const char *str1, const char *str2, size_t n);
+char *ft_strncpy(char *dest, const char *src, int n);
+int validate_map_elem(char **hmap);
 
 
 
