@@ -2,7 +2,19 @@
 
 void	process_map_data(char *buff, t_game *game)
 {
-	game->map = ft_split(buff, '\n');
+    int i;
+
+    i = 0;
+	game->hmap = ft_split(buff, '\n');
+    while(game->hmap[i])
+    {
+        if(game->hmap[i][0] == '1')
+        {
+            game->map = &game->hmap[i];
+            break;
+        }
+        i++;
+    }
 }
 int	read_map(char *file, t_game *game)
 {
@@ -32,7 +44,7 @@ int	read_map(char *file, t_game *game)
 		return (1);
 	return ((process_map_data(buff, game)), free(buff), 0);
 }
-int	check_map_wall(char **hmap, char **map)
+int	check_map_wall(t_game *game)
 {
 	int	i;
 	int	j;
@@ -40,70 +52,55 @@ int	check_map_wall(char **hmap, char **map)
     int map_height;
 
 	i = 0;
-	if (!hmap || !hmap[0])
+	if (!game->map || !game->map[0])
 		return (1);
-    while(hmap[i])
-    {
-        if(hmap[i][0] == '1')
-        {
-            map = &hmap[i];
-            break;
-        }
-        i++;
-    }
-    i = 0;
-    // while(map[i]) // check map 1
-    // {
-    //     printf("%s\n", map[i]);
-    //     i++;
-    // }
-	raw_len = ft_strlen(map[0]);
+	raw_len = ft_strlen(game->map[0]);
 	if (raw_len == 0)
 		return (1);
 	j = 0;
 	while (j < raw_len) // check first row
 	{
-        if(map[0][j] == ' ')
+        if(game->map[0][j] == ' ')
         {
             j++;
             continue;
         }
-		if(map[0][j] != '1')
+		if(game->map[0][j] != '1')
 			return (1);
 		j++;
 	}
-	map_height = get_map_height(&map[i]);
+	map_height = get_map_height(&game->map[i]);
     i = 1;
 	while (i < map_height -1)   // check midel rows
 	{
-		raw_len = ft_strlen(map[i]);
+		raw_len = ft_strlen(game->map[i]);
         if(raw_len == 0)
             return(1);
         j = 0;
-        while(j < raw_len && map[i][j] == ' ')  // check left wall
+        while(j < raw_len && game->map[i][j] == ' ')  // check left wall
             j++;
-        if(j >= raw_len || map[i][j] != '1')
+        if(j >= raw_len || game->map[i][j] != '1')
             return(1);
         j = raw_len -1;
-        while(j >= 0 && map[i][j] == ' ') // check right wall
+        while(j >= 0 && game->map[i][j] == ' ') // check right wall
             j--;
-        if(j < 0 || map[i][j] != '1')
+        if(j < 0 || game->map[i][j] != '1')
             return(1);
         i++;
 	}
     i = map_height -1;
-	raw_len = ft_strlen(map[i]);  // check last row
+	raw_len = ft_strlen(game->map[i]);  // check last row
 	if (raw_len == 0)
         return (1);
 	j = 0;
 	while (j < raw_len)
 	{
-        if(map[i][j] == ' ')
+        if(game->map[i][j] == ' ')
         {
             j++;
             continue;
         }
-		if (map[i][j] != '1')
+		if (game->map[i][j] != '1')
 			return (1);
 		j++;
 	}
@@ -234,53 +231,94 @@ int validate_map_char(char **map)
     }
     return(0);
 }
-int validate_map_elem(char **hmap)
+int count_comma(char *str)
+{
+    int i;
+    int comma;
+
+    comma = 0;
+    i = 0;
+    while(str[i])
+    {
+        if(str[i] == ',')
+            comma++;
+        i++;
+    }
+    return(comma);
+
+}
+int pars_textures( char *line , t_config *config, const char *id)
+{
+    while(*line == ' ' || *line == '\t')
+        line++;
+    ft_strncpy(config->ids, id, 2);
+    config->ids->id[2] = '\0';
+    ft_strncpy(config->path, line, sizeof(config->path) -1);
+    config->path[sizeof(config->path)- 1] = '\0';
+    return(0);
+}
+
+int pars_rgb(char *line , int *rgb)
 {
     int i;
     int j;
+    char **split;
 
-    t_map_elem map_elem;
-    t_path path;
-    map_elem.path = &path;
     i = 0;
-    while(hmap[i])
+    split = ft_split(line, ',');
+    if(!split)
+        return(1);
+    while(i < 3)
     {
-        if(hmap[i][0] == '\n')
+        rgb[i] = ft_atoi(split[i]);
+        if(rgb[i] < 0 || rgb[i] > 255)
+            return(1);
+        i++;
+    }
+    if(i != 3)
+        return(1);
+    j = 0;
+    while(split[j])
+    {
+        free(split[j]);
+        j++;
+    }
+    free(split);
+    return(0);
+}
+int check_map_elem(t_game *game) // add game in param
+{
+    t_config config;
+    game->config = &config;
+    int i;
+
+    i = 0;
+    while(game->hmap[i])
+    {
+        if(game->hmap[i][0] == '\n')
         {
             i++;
             continue;
         }
-        j = 0;
-        if(!ft_strncmp(&hmap[i][j], "NO ",3))
+        if(!ft_strncmp(game->hmap[i], "NO ", 3))
         {
-            ft_strncpy(map_elem.path->identifier, &hmap[i][j], 2);
-            while(hmap[i][j])
-            {
-                if(hmap[i][j] == ' ' || hmap[i][j] == '\t')
-                j++;
-            }
-             ft_strncpy(map_elem.path->path, &hmap[i][j], ft_strlen(&hmap[i][j]));
-             printf("path %s\n", map_elem.path->path);
+            pars_textures(game->hmap[i] + 3, &config, "NO");
         }
-        else if(!ft_strncmp(&hmap[i][j], "SO ",3))
+        else if(!ft_strncmp(game->hmap[i], "SO ", 3))
+            pars_textures(game->hmap[i] + 3, &config, "SO");
+        else if(!ft_strncmp(game->hmap[i], "EA ", 3))
+            pars_textures(game->hmap[i] + 3, &config, "EA");
+        else if(!ft_strncmp(game->hmap[i], "WE ", 3))
+            pars_textures(game->hmap[i] + 3, &config, "WE");
+        else if(!ft_strncmp(game->hmap[i], "C ", 2))
         {
-
+            if(pars_rgb(game->hmap[i] + 2, config.ceiling_rgb))
+                return(1);
         }
-        else if(!ft_strncmp(&hmap[i][j], "EA ",3))
+        else if(!ft_strncmp(game->hmap[i], "F ", 2))
         {
-
-        }
-        else if(!ft_strncmp(&hmap[i][j], "WE ",3))
-        {
-
-        }
-        else if(!ft_strncmp(&hmap[i][j], "C ",2))
-        {
-
-        }
-        if(!ft_strncmp(&hmap[i][j], "F ",2))
-        {
-
+            if(pars_rgb(game->hmap[i] + 2, config.floor_rgb))
+                return(1);
         }
         else
             return(1);
@@ -288,20 +326,19 @@ int validate_map_elem(char **hmap)
     }
     return(0);
 }
+
 int check_map_chars(char **map)
 {
-    // int player_count;
-    // t_map_colors map_colors;
+    int player_count;
 
     if(!map || !map[0])
         return(1);
-    validate_map_elem(map);
-    // convert_space_to_zero(map);
-    // if(validate_map_char(map))
-    //     return(1);
-    // player_count = count_player(map);
-    // if(player_count != 1)
-    //     return(1);
+    if(validate_map_char(map))
+        return(1);
+    convert_space_to_zero(map);
+    player_count = count_player(map);
+    if(player_count != 1)
+        return(1);
     return (0);
 }
 
@@ -321,10 +358,10 @@ void free_map(char **map)
 }
 void cleanup_game(t_game *game)
 {
-    if(game->map)
+    if(game->hmap)
     {
-        free_map(game->map);
-        game->map = NULL;
+        free_map(game->hmap);
+        game->hmap = NULL;
     }
 
 }

@@ -9,6 +9,7 @@
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <limits.h>
 # include <unistd.h>
 
 
@@ -18,38 +19,28 @@ typedef struct s_ppos
     int width;
 } t_ppos;
 
+typedef struct s_ids
+{
+    char id[2];
+    char *path;
+}   t_ids;
+
+typedef struct s_config
+{
+    t_ids ids[4];
+    char path[256];
+    int floor_rgb[3];
+    int ceiling_rgb[3];
+} t_config;
 typedef struct s_game
 {
     int height;
     int width;
     char **map;
     char **hmap;
-    t_ppos player_pos;
+    t_ppos *player_pos;
+    t_config *config;
 }  t_game;
-
-typedef struct s_rgb_num
-{
-    int rgb1;
-    int rgb2;
-    int rgb3;
-} t_rgb_num;
-
-typedef struct s_map_colors
-{
-    char *identifier;
-    t_rgb_num *rgb;
-} t_map_colors;
-
-typedef struct s_path
-{
-    char *identifier;
-    char *path;
-} t_path;
-typedef struct s_map_elem
-{
-    t_path *path;
-    t_map_colors *colors;
-} t_map_elem;
 
 char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
@@ -61,13 +52,11 @@ int check_map_chars(char **map);
 int get_map_height(char **map);
 void free_map(char **map);
 void cleanup_game(t_game *game);
-int	check_map_wall(char **hmap, char **map);
+int	check_map_wall(t_game *game);
 int	ft_strncmp(const char *str1, const char *str2, size_t n);
 char *ft_strncpy(char *dest, const char *src, int n);
-int validate_map_elem(char **hmap);
-
-
-
+int check_map_elem(t_game *game);
+int	ft_atoi(const char *str);
 
 
 #endif
