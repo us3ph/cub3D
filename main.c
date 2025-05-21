@@ -9,8 +9,7 @@ int main(int argc, char **argv)
         return err ("Error\n"),err("map extention not correct"), 1;
     if(read_map(argv[1],&game))
         return err("Error\n"),err("unable to read map"), cleanup_game(&game), 1;
-    check_map_elem(&game);
-    if(!check_map_elem(&game))
+    if(check_map_elem(&game))
         return err("Error\n"), err("invalid map config"), cleanup_game(&game), 1;
     if(check_map_wall(&game))
         return err("Error\n"), err("map wall not closed"), cleanup_game(&game), 1;

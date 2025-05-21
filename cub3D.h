@@ -21,7 +21,7 @@ typedef struct s_ppos
 
 typedef struct s_ids
 {
-    char id[2];
+    char id[3];
     char *path;
 }   t_ids;
 
@@ -57,6 +57,7 @@ int	ft_strncmp(const char *str1, const char *str2, size_t n);
 char *ft_strncpy(char *dest, const char *src, int n);
 int check_map_elem(t_game *game);
 int	ft_atoi(const char *str);
+int check_config_dup(t_game *game);
 
 
 #endif

@@ -249,14 +249,28 @@ int count_comma(char *str)
 }
 int pars_textures( char *line, int *j, t_config *config, const char *id)
 {
-    // int j;
-
-    // *j = 0;
     while(*line == ' ' || *line == '\t')
         line++;
     ft_strncpy(config->ids[*j].id, id, 2);
     config->ids[*j].id[2] = '\0';
     config->ids[*j].path = ft_strdup(line);
+    return(0);
+}
+
+int ft_isdigit(char *str)
+{
+
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        while(str[i] == ' ' || str[i] == '\t')
+            i++;
+        if (str[i] < 48 || str[i] > 57)
+		    return (1);
+        i++;
+    }
     return(0);
 }
 
@@ -267,18 +281,29 @@ int pars_rgb(char *line , int *rgb)
     char **split;
 
     i = 0;
+    if(count_comma(line) != 2)
+        return(1);
     split = ft_split(line, ',');
     if(!split)
         return(1);
+    while(split[i])
+    {
+        if(ft_isdigit(split[i]))
+            return(1);
+        i++;
+    }
+    i = 0;
     while(i < 3)
     {
+        if (split[i] == NULL)
+        {
+            return(1);
+        }
         rgb[i] = ft_atoi(split[i]);
         if(rgb[i] < 0 || rgb[i] > 255)
             return(1);
         i++;
     }
-    if(i != 3)
-        return(1);
     j = 0;
     while(split[j])
     {
@@ -288,6 +313,7 @@ int pars_rgb(char *line , int *rgb)
     free(split);
     return(0);
 }
+
 int check_map_elem(t_game *game) // add game in param
 {
     int i;
@@ -298,7 +324,7 @@ int check_map_elem(t_game *game) // add game in param
         return(1);
     i = 0;
     j = 0;
-    while(game->hmap[i])
+    while(i < 6 && game->hmap[i][0] != '1')
     {
         if(game->hmap[i][0] == '\n')
         {
@@ -328,9 +354,34 @@ int check_map_elem(t_game *game) // add game in param
         i++;
         j++;
     }
+    if(check_config_dup(game))
+        return(1);
     return(0);
 }
+int check_config_dup(t_game *game)
+{
+    int i;
+    int j;
 
+    i = 0;
+    while(i < 6)
+    {
+        j = i + 1;
+        while(j < 6)
+        {
+            if(game->hmap[i][0] == '\n')
+            {
+                i++;
+                continue;
+            }
+            if(!ft_strncmp(game->config->ids[i].id, game->config->ids[j].id, 3))
+                return(1);
+            j++;
+        }
+        i++;
+    }
+    return(0);
+}
 int check_map_chars(char **map)
 {
     int player_count;
@@ -379,7 +430,7 @@ void cleanup_game(t_game *game)
     if(game->hmap)
     {
         free_map(game->hmap);
-        free_config(game);
+        // free_config(game);
         game->hmap = NULL;
         game->config = NULL;
     }

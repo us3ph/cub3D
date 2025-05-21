@@ -1,10 +1,11 @@
 NO textures/the_scream.xpm
 SO textures/brick.xpm
 EA textures/wood.xpm
-E textures/grey.xpm
+WE textures/grey.xpm
 
-C 51,153,255
+C 2,2,255
 F 34,139,34
+
 
 11111111111111111111111111
 100000000011N1000000000011111
