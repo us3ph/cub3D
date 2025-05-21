@@ -247,14 +247,16 @@ int count_comma(char *str)
     return(comma);
 
 }
-int pars_textures( char *line , t_config *config, const char *id)
+int pars_textures( char *line, int *j, t_config *config, const char *id)
 {
+    // int j;
+
+    // *j = 0;
     while(*line == ' ' || *line == '\t')
         line++;
-    ft_strncpy(config->ids, id, 2);
-    config->ids->id[2] = '\0';
-    ft_strncpy(config->path, line, sizeof(config->path) -1);
-    config->path[sizeof(config->path)- 1] = '\0';
+    ft_strncpy(config->ids[*j].id, id, 2);
+    config->ids[*j].id[2] = '\0';
+    config->ids[*j].path = ft_strdup(line);
     return(0);
 }
 
@@ -288,11 +290,14 @@ int pars_rgb(char *line , int *rgb)
 }
 int check_map_elem(t_game *game) // add game in param
 {
-    t_config config;
-    game->config = &config;
     int i;
+    int j;
 
+    game->config = malloc(sizeof(t_config));
+    if(!game->config)
+        return(1);
     i = 0;
+    j = 0;
     while(game->hmap[i])
     {
         if(game->hmap[i][0] == '\n')
@@ -301,28 +306,27 @@ int check_map_elem(t_game *game) // add game in param
             continue;
         }
         if(!ft_strncmp(game->hmap[i], "NO ", 3))
-        {
-            pars_textures(game->hmap[i] + 3, &config, "NO");
-        }
+            pars_textures(game->hmap[i] + 3, &j, game->config, "NO");
         else if(!ft_strncmp(game->hmap[i], "SO ", 3))
-            pars_textures(game->hmap[i] + 3, &config, "SO");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "SO");
         else if(!ft_strncmp(game->hmap[i], "EA ", 3))
-            pars_textures(game->hmap[i] + 3, &config, "EA");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "EA");
         else if(!ft_strncmp(game->hmap[i], "WE ", 3))
-            pars_textures(game->hmap[i] + 3, &config, "WE");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "WE");
         else if(!ft_strncmp(game->hmap[i], "C ", 2))
         {
-            if(pars_rgb(game->hmap[i] + 2, config.ceiling_rgb))
+            if(pars_rgb(game->hmap[i] + 2, game->config->ceiling_rgb))
                 return(1);
         }
         else if(!ft_strncmp(game->hmap[i], "F ", 2))
         {
-            if(pars_rgb(game->hmap[i] + 2, config.floor_rgb))
+            if(pars_rgb(game->hmap[i] + 2, game->config->floor_rgb))
                 return(1);
         }
         else
             return(1);
         i++;
+        j++;
     }
     return(0);
 }
@@ -345,7 +349,7 @@ int check_map_chars(char **map)
 void free_map(char **map)
 {
     int i;
-    
+
     if(!map)
         return;
     i = 0;
@@ -356,12 +360,28 @@ void free_map(char **map)
     }
     free(map);
 }
+void free_config(t_game *game)
+{
+    int i;
+
+    i = 0;
+    while(game->config->ids[i].path != NULL)
+    {
+        free(game->config->ids[i].path);
+        i++;
+    }
+    free(game->config);
+}
 void cleanup_game(t_game *game)
 {
+    if(!game || !game->config)
+        return;
     if(game->hmap)
     {
         free_map(game->hmap);
+        free_config(game);
         game->hmap = NULL;
+        game->config = NULL;
     }
 
 }

@@ -28,10 +28,10 @@ typedef struct s_ids
 typedef struct s_config
 {
     t_ids ids[4];
-    char path[256];
     int floor_rgb[3];
     int ceiling_rgb[3];
 } t_config;
+
 typedef struct s_game
 {
     int height;
