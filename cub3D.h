@@ -54,10 +54,12 @@ void free_map(char **map);
 void cleanup_game(t_game *game);
 int	check_map_wall(t_game *game);
 int	ft_strncmp(const char *str1, const char *str2, size_t n);
+int ft_strcmp(const char *s1, const char *s2);
 char *ft_strncpy(char *dest, const char *src, int n);
 int check_map_elem(t_game *game);
 int	ft_atoi(const char *str);
 int check_config_dup(t_game *game);
+int pars_textures( char *line, int *j, t_config *config, const char *id);
 
 
 #endif

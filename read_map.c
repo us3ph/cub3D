@@ -249,6 +249,8 @@ int count_comma(char *str)
 }
 int pars_textures( char *line, int *j, t_config *config, const char *id)
 {
+    if(*j < 0 || *j > 4)
+        return(-1);
     while(*line == ' ' || *line == '\t')
         line++;
     ft_strncpy(config->ids[*j].id, id, 2);
@@ -332,13 +334,13 @@ int check_map_elem(t_game *game) // add game in param
             continue;
         }
         if(!ft_strncmp(game->hmap[i], "NO ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "NO");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "NO"), j++;
         else if(!ft_strncmp(game->hmap[i], "SO ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "SO");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "SO"), j++;
         else if(!ft_strncmp(game->hmap[i], "EA ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "EA");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "EA"), j++;
         else if(!ft_strncmp(game->hmap[i], "WE ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "WE");
+            pars_textures(game->hmap[i] + 3, &j, game->config, "WE"), j++;
         else if(!ft_strncmp(game->hmap[i], "C ", 2))
         {
             if(pars_rgb(game->hmap[i] + 2, game->config->ceiling_rgb))
@@ -352,29 +354,49 @@ int check_map_elem(t_game *game) // add game in param
         else
             return(1);
         i++;
-        j++;
     }
+    i = 0;
     if(check_config_dup(game))
         return(1);
     return(0);
 }
+
+int lines_bfr_map(char **hmap)
+{
+    int i;
+
+    i = 0;
+    while(hmap[i] && hmap[i][0] != '1')
+    {
+        i++;
+    }
+    return(i);
+}
+
 int check_config_dup(t_game *game)
 {
     int i;
     int j;
+    int count;
 
     i = 0;
-    while(i < 6)
+    count = lines_bfr_map(game->hmap);
+    while(i < count && game->hmap[i][0] != '\0')
     {
-        j = i + 1;
-        while(j < 6)
+        if(game->hmap[i][0] == '\n')
         {
-            if(game->hmap[i][0] == '\n')
+            i++;
+            continue;
+        }
+        j = i + 1;
+        while(j < count && game->hmap[j][0] != '\0')
+        {
+            if(game->hmap[j][0] == '\n')
             {
-                i++;
+                j++;
                 continue;
             }
-            if(!ft_strncmp(game->config->ids[i].id, game->config->ids[j].id, 3))
+            if(!ft_strcmp(game->hmap[i], game->hmap[j]))
                 return(1);
             j++;
         }
