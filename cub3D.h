@@ -34,6 +34,7 @@ typedef struct s_config
 
 typedef struct s_game
 {
+    int row_index;
     int height;
     int width;
     char **map;

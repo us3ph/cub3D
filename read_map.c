@@ -8,7 +8,7 @@ void	process_map_data(char *buff, t_game *game)
 	game->hmap = ft_split(buff, '\n');
     while(game->hmap[i])
     {
-        if(game->hmap[i][0] == '1')
+        if(game->hmap[i][0] == '1' || game->hmap[i][0] == ' ' || game->hmap[i][0] == '0')
         {
             game->map = &game->hmap[i];
             break;
@@ -44,6 +44,28 @@ int	read_map(char *file, t_game *game)
 		return (1);
 	return ((process_map_data(buff, game)), free(buff), 0);
 }
+
+int get_row_len(t_game *game)
+{
+
+    size_t j;
+    int row_len;
+
+    row_len = 0;
+     j = 0;
+    while (j < ft_strlen(game->map[0])) // check first row
+    {
+        if(game->map[0][j] == ' ')
+        {
+            j++;
+            continue;
+        }
+        if(game->map[0][j] == '1' || game->map[0][j] == '0')
+            row_len++;
+        j++;
+    }
+    return(row_len);
+}
 int	check_map_wall(t_game *game)
 {
 	int	i;
@@ -54,7 +76,7 @@ int	check_map_wall(t_game *game)
 	i = 0;
 	if (!game->map || !game->map[0])
 		return (1);
-	raw_len = ft_strlen(game->map[0]);
+	raw_len = get_row_len(game);
 	if (raw_len == 0)
 		return (1);
 	j = 0;
