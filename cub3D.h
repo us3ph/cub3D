@@ -45,9 +45,9 @@ typedef struct s_game
 
 char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
+int	check_map_extention(char *str);
 // int check_map_wall(char **map);
-void process_map_data(char *buff, t_game *game);
-int check_map_extention(char *str);
+void  process_map_data(char *buff, t_game *game);
 void err(char *str);
 int check_map_chars(char **map);
 int get_map_height(char **map);
@@ -61,6 +61,7 @@ int check_map_elem(t_game *game);
 int	ft_atoi(const char *str);
 int check_config_dup(t_game *game);
 int pars_textures( char *line, int *j, t_config *config, const char *id);
+void	*ft_memset(void *str, int c, size_t n);
 
 
 #endif

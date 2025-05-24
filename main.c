@@ -3,9 +3,9 @@
 int main(int argc, char **argv)
 {
     t_game game;
-    
+
     if(argc != 2)
-        return(1);
+        return err("Error\n"), err("num arguments not correct"), 1;
     if(check_map_extention(argv[1]))
         return err ("Error\n"),err("map extention not correct"), 1;
     if(read_map(argv[1],&game))

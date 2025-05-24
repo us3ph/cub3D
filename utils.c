@@ -39,7 +39,7 @@ char *ft_strncpy(char *dest, const char *src, int n)
 		dest[i] = src[i];
 		i++;
 	}
-	while (i < n) 
+	while (i < n)
     {
         dest[i] = '\0';
         i++;
@@ -72,4 +72,20 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (result * signe);
+}
+void	*ft_memset(void *str, int c, size_t n)
+{
+	size_t			i;
+	char			*s;
+	unsigned char	ch;
+
+	s = (char *)str;
+	ch = (unsigned char)c;
+	i = 0;
+	while (i < n)
+	{
+		s[i] = ch;
+		i++;
+	}
+	return (str);
 }

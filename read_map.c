@@ -1,11 +1,18 @@
 #include "cub3D.h"
 
-void	process_map_data(char *buff, t_game *game)
+void  process_map_data(char *buff, t_game *game)
 {
     int i;
 
     i = 0;
 	game->hmap = ft_split(buff, '\n');
+    free(buff);
+    if(game->hmap == NULL || game->hmap[0] == NULL || game->hmap[0][0] == '\0')
+    {
+        free(game->hmap);
+        game->hmap = NULL;
+        return ;
+    }
     while(game->hmap[i])
     {
         if(game->hmap[i][0] == '1' || game->hmap[i][0] == ' ' || game->hmap[i][0] == '0')
@@ -32,8 +39,6 @@ int	read_map(char *file, t_game *game)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		// if(*line == '\n')
-		//     return(free(line), free(buff), 1);
 		tmp = buff;
 		buff = ft_strjoin(buff, line);
 		free(tmp);
@@ -42,7 +47,8 @@ int	read_map(char *file, t_game *game)
     close(fd);
 	if (!buff)
 		return (1);
-	return ((process_map_data(buff, game)), free(buff), 0);
+    process_map_data(buff, game);
+	return (0);
 }
 
 int get_row_len(t_game *game)
@@ -297,11 +303,22 @@ int ft_isdigit(char *str)
     }
     return(0);
 }
+void free_split(char **split)
+{
+    int i;
 
+    i = 0;
+    while(split[i])
+    {
+        free(split[i]);
+        i++;
+    }
+    free(split);
+}
 int pars_rgb(char *line , int *rgb)
 {
     int i;
-    int j;
+    // int j;
     char **split;
 
     i = 0;
@@ -313,7 +330,7 @@ int pars_rgb(char *line , int *rgb)
     while(split[i])
     {
         if(ft_isdigit(split[i]))
-            return(1);
+            return(free_split(split), 1);
         i++;
     }
     i = 0;
@@ -321,20 +338,14 @@ int pars_rgb(char *line , int *rgb)
     {
         if (split[i] == NULL)
         {
-            return(1);
+            return(free_split(split), 1);
         }
         rgb[i] = ft_atoi(split[i]);
         if(rgb[i] < 0 || rgb[i] > 255)
             return(1);
         i++;
     }
-    j = 0;
-    while(split[j])
-    {
-        free(split[j]);
-        j++;
-    }
-    free(split);
+    free_split(split);
     return(0);
 }
 
@@ -343,9 +354,12 @@ int check_map_elem(t_game *game) // add game in param
     int i;
     int j;
 
+    if(!game->hmap || !game->hmap[0])
+        return(1);
     game->config = malloc(sizeof(t_config));
     if(!game->config)
         return(1);
+    ft_memset(game->config, 0, sizeof(t_config));
     i = 0;
     j = 0;
     while(i < 6 && game->hmap[i][0] != '1')
@@ -378,6 +392,8 @@ int check_map_elem(t_game *game) // add game in param
         i++;
     }
     i = 0;
+    // if(j != 4)
+    //     return(1);
     if(check_config_dup(game))
         return(1);
     return(0);
@@ -458,9 +474,18 @@ void free_map(char **map)
 void free_config(t_game *game)
 {
     int i;
+    int num_ids;
 
     i = 0;
-    while(game->config->ids[i].path != NULL)
+    num_ids = 0;
+    while(i < 4)
+    {
+        if(game->config->ids[i].id[0] != '\0')
+            num_ids++;
+        i++;
+    }
+    i = 0;
+    while(i < num_ids && game->config->ids[i].path != NULL)
     {
         free(game->config->ids[i].path);
         i++;
@@ -474,7 +499,7 @@ void cleanup_game(t_game *game)
     if(game->hmap)
     {
         free_map(game->hmap);
-        // free_config(game);
+        free_config(game);
         game->hmap = NULL;
         game->config = NULL;
     }
