@@ -2,6 +2,7 @@
 #define CUB3D_H
 
 # include "get_next_line.h"
+#include "libft.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
@@ -34,7 +35,8 @@ typedef struct s_config
 
 typedef struct s_game
 {
-    int row_index;
+    int map_lines;
+    int map_start_line;
     int height;
     int width;
     char **map;
@@ -47,7 +49,7 @@ char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
 int	check_map_extention(char *str);
 // int check_map_wall(char **map);
-void  process_map_data(char *buff, t_game *game);
+// void  process_map_data(char *buff, t_game *game);
 void err(char *str);
 int check_map_chars(char **map);
 int get_map_height(char **map);
@@ -62,6 +64,20 @@ int	ft_atoi(const char *str);
 int check_config_dup(t_game *game);
 int pars_textures( char *line, int *j, t_config *config, const char *id);
 void	*ft_memset(void *str, int c, size_t n);
+int check_map_lines(t_game *game);
+int get_row_len(t_game *game);
+int pars_rgb(char *line , int *rgb);
+int is_valid_char(char c);
+void convert_space_to_zero(char **map);
+int count_player(char **map);
+int count_lines_bfr_map(char **hmap);
+void free_config(t_game *game);
+void free_split(char **split);
+int count_comma(char *str);
+int ft_isdigit_str(char *str);
+int vertical(char **map, int i, int j, int map_height);
+int horizonal(char *row, int j, int row_len);
 
 
+int store_and_validat_map(char *file, t_game *game);
 #endif

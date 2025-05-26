@@ -46,46 +46,63 @@ char *ft_strncpy(char *dest, const char *src, int n)
     }
 	return(dest);
 }
-int	ft_atoi(const char *str)
-{
-	int		i;
-	int		signe;
-	long	result;
+// int	ft_atoi(const char *str)
+// {
+// 	int		i;
+// 	int		signe;
+// 	long	result;
 
-	i = 0;
-	signe = 1;
-	result = 0;
-	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
-		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			signe *= -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + str[i] - '0';
-		if ((signe == 1 && result > INT_MAX) || (signe == -1 && result
-				* signe < INT_MIN))
-			return (-1);
-		i++;
-	}
-	return (result * signe);
-}
-void	*ft_memset(void *str, int c, size_t n)
-{
-	size_t			i;
-	char			*s;
-	unsigned char	ch;
+// 	i = 0;
+// 	signe = 1;
+// 	result = 0;
+// 	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
+// 		i++;
+// 	if (str[i] == '+' || str[i] == '-')
+// 	{
+// 		if (str[i] == '-')
+// 			signe *= -1;
+// 		i++;
+// 	}
+// 	while (str[i] >= '0' && str[i] <= '9')
+// 	{
+// 		result = result * 10 + str[i] - '0';
+// 		if ((signe == 1 && result > INT_MAX) || (signe == -1 && result
+// 				* signe < INT_MIN))
+// 			return (-1);
+// 		i++;
+// 	}
+// 	return (result * signe);
+// }
+// void	*ft_memset(void *str, int c, size_t n)
+// {
+// 	size_t			i;
+// 	char			*s;
+// 	unsigned char	ch;
 
-	s = (char *)str;
-	ch = (unsigned char)c;
-	i = 0;
-	while (i < n)
-	{
-		s[i] = ch;
-		i++;
-	}
-	return (str);
-}
+// 	s = (char *)str;
+// 	ch = (unsigned char)c;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		s[i] = ch;
+// 		i++;
+// 	}
+// 	return (str);
+// }
+
+// int ft_isdigit(char *str)
+// {
+
+//     int i;
+
+//     i = 0;
+//     while(str[i])
+//     {
+//         while(str[i] == ' ' || str[i] == '\t')
+//             i++;
+//         if (str[i] < 48 || str[i] > 57)
+// 		    return (1);
+//         i++;
+//     }
+//     return(0);
+// }

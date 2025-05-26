@@ -1,36 +1,41 @@
 NAME = cub3D
-
 CC = cc
-
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
-
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 RM = rm -rf
 
 MLX_FLAGS = -L/home/x-hunter/cub3D/minilibix-linux -L/usr/lib -lXext -lX11 -lm -lz
-
 MLX_INCLUDE = -Iminilibx-linux
 
-SRC = ft_split.c get_next_line.c get_next_line_utils.c read_map.c main.c utils.c\
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_INCLUDE = -I$(LIBFT_DIR)
+
+SRC = ft_split.c get_next_line.c get_next_line_utils.c read_map.c main.c utils.c check_func.c\
+	  cleanup.c parsing.c count_func.c convert_func.c\
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) -o $(NAME)
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) $(LIBFT) -o $(NAME)
 
+$(LIBFT):
+	make -C $(LIBFT_DIR)
 
 %.o: %.c cub3D.h
-	$(CC) $(CFLAGS) $(MLX_INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(MLX_INCLUDE) $(LIBFT_INCLUDE) -c $< -o $@
 
 clean:
 	$(RM) $(OBJ)
+	make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	$(RM) $(NAME)
+	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: clean fclean re
+.PHONY: clean fclean re all
 
 .SECONDARY:
