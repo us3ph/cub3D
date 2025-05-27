@@ -1,32 +1,19 @@
 #include "cub3D.h"
 
-void cleanup_game(t_game *game)
-{
-    if(!game || !game->config)
-        return;
-    if(game->hmap)
-    {
-        free_map(game->hmap);
-        free_config(game);
-        game->hmap = NULL;
-        game->config = NULL;
-    }
-
-}
-
-void free_map(char **map)
+void free_map(t_game *game)
 {
     int i;
 
-    if(!map)
+    if (!game->map)
         return;
     i = 0;
-    while(map[i])
+    while (game->map[i])
     {
-        free(map[i]);
+        free(game->map[i]);
         i++;
     }
-    free(map);
+    free(game->map);
+    game->map = NULL;
 }
 
 void free_config(t_game *game)
@@ -36,19 +23,20 @@ void free_config(t_game *game)
 
     i = 0;
     num_ids = 0;
-    while(i < 4)
+    while (i < 4)
     {
-        if(game->config->ids[i].id[0] != '\0')
+        if (game->config->ids[i].id[0] != '\0')
             num_ids++;
         i++;
     }
     i = 0;
-    while(i < num_ids && game->config->ids[i].path != NULL)
+    while (i < num_ids && game->config->ids[i].path != NULL)
     {
         free(game->config->ids[i].path);
         i++;
     }
     free(game->config);
+    game->config = NULL;
 }
 
 void free_split(char **split)
@@ -56,7 +44,7 @@ void free_split(char **split)
     int i;
 
     i = 0;
-    while(split[i])
+    while (split[i])
     {
         free(split[i]);
         i++;
@@ -64,10 +52,10 @@ void free_split(char **split)
     free(split);
 }
 
-void	err(char *str)
+void err(char *str)
 {
-	while (*str)
-		write(2, str++, 1);
+    while (*str)
+        write(2, str++, 1);
 }
 
 int get_map_height(char **map)
@@ -75,7 +63,17 @@ int get_map_height(char **map)
     int height;
 
     height = 0;
-    while(map[height])
+    while (map[height])
         height++;
-    return(height);
+    return (height);
+}
+
+void cleanup_game(t_game *game)
+{
+    if (!game)
+        return;
+    if (game->map)
+        free_map(game);
+    if (game->config)
+        free_config(game);
 }

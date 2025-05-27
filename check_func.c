@@ -78,53 +78,6 @@ int	check_map_wall(t_game *game)
 	return (0);
 }
 
-int check_map_elem(t_game *game) // add game in param
-{
-    int i;
-    int j;
-
-    if(!game->hmap || !game->hmap[0])
-        return(1);
-    game->config = malloc(sizeof(t_config));
-    if(!game->config)
-        return(1);
-    ft_memset(game->config, 0, sizeof(t_config));
-    i = 0;
-    j = 0;
-    while(i < 6 && game->hmap[i][0] != '1')
-    {
-        if(game->hmap[i][0] == '\n')
-        {
-            i++;
-            continue;
-        }
-        if(!ft_strncmp(game->hmap[i], "NO ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "NO"), j++;
-        else if(!ft_strncmp(game->hmap[i], "SO ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "SO"), j++;
-        else if(!ft_strncmp(game->hmap[i], "EA ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "EA"), j++;
-        else if(!ft_strncmp(game->hmap[i], "WE ", 3))
-            pars_textures(game->hmap[i] + 3, &j, game->config, "WE"), j++;
-        else if(!ft_strncmp(game->hmap[i], "C ", 2))
-        {
-            if(pars_rgb(game->hmap[i] + 2, game->config->ceiling_rgb))
-                return(1);
-        }
-        else if(!ft_strncmp(game->hmap[i], "F ", 2))
-        {
-            if(pars_rgb(game->hmap[i] + 2, game->config->floor_rgb))
-                return(1);
-        }
-        else
-            return(1);
-        i++;
-    }
-    i = 0;
-    if(check_config_dup(game))
-        return(1);
-    return(0);
-}
 
 int validate_map_char(char **map)
 {
@@ -148,37 +101,6 @@ int validate_map_char(char **map)
     return(0);
 }
 
-int check_config_dup(t_game *game)
-{
-    int i;
-    int j;
-    int count;
-
-    i = 0;
-    count = count_lines_bfr_map(game->hmap);
-    while(i < count && game->hmap[i][0] != '\0')
-    {
-        if(game->hmap[i][0] == '\n')
-        {
-            i++;
-            continue;
-        }
-        j = i + 1;
-        while(j < count && game->hmap[j][0] != '\0')
-        {
-            if(game->hmap[j][0] == '\n')
-            {
-                j++;
-                continue;
-            }
-            if(!ft_strcmp(game->hmap[i], game->hmap[j]))
-                return(1);
-            j++;
-        }
-        i++;
-    }
-    return(0);
-}
 
 int check_map_chars(char **map)
 {
@@ -193,4 +115,31 @@ int check_map_chars(char **map)
     if(player_count != 1)
         return(1);
     return (0);
+}
+
+int check_config_dup(t_config *config)
+{
+    int i;
+    int j;
+    
+    i = 0;
+    while(i < 4)
+    {
+        if(config->ids[i].id[0] != '\0')
+        {
+            j = i + 1;
+            while(j < 4)
+            {
+                if(config->ids[j].id[0] != '\0' && 
+                   ft_strcmp(config->ids[i].id, config->ids[j].id) == 0)
+                {
+                    err("Error\nduplicate texture identifier\n");
+                    return(1);
+                }
+                j++;
+            }
+        }
+        i++;
+    }
+    return(0);
 }

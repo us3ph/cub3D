@@ -1,15 +1,54 @@
 #include "cub3D.h"
 
-int pars_textures( char *line, int *j, t_config *config, const char *id)
+// int pars_textures( char *line, int *j, t_config *config, const char *id)
+// {
+//     ft_strncpy(config->ids[*j].id, id, 2);
+//     config->ids[*j].id[2] = '\0';
+//     while(*line == ' ' || *line == '\t')
+//         line++;
+//     config->ids[*j].path = ft_strdup(line);
+//     if(j)
+//         (*j)++;
+//     return(0);
+// }
+
+// Helper function to get the correct index for texture type
+int get_texture_index(const char *id)
 {
-    ft_strncpy(config->ids[*j].id, id, 2);
-    config->ids[*j].id[2] = '\0';
+    if (ft_strcmp(id, "NO") == 0) return 0;
+    if (ft_strcmp(id, "SO") == 0) return 1;
+    if (ft_strcmp(id, "WE") == 0) return 2;
+    if (ft_strcmp(id, "EA") == 0) return 3;
+    return -1;
+}
+
+// Fixed pars_textures function
+int pars_textures(char *line, int *i, t_config *config, const char *id)
+{
+    int index;
+
+    index = get_texture_index(id);
+    if (index == -1)
+        return 1;
+    
+    // Check if this texture type already exists
+    if (config->ids[index].id[0] != '\0')
+    {
+        err("Error\nDuplicate texture identifier found\n");
+        exit(1);
+    }
+    
+    ft_strncpy(config->ids[index].id, id, 2);
+    config->ids[index].id[2] = '\0';
     while(*line == ' ' || *line == '\t')
         line++;
-    config->ids[*j].path = ft_strdup(line);
-    if(j)
-        (*j)++;
-    return(0);
+    config->ids[index].path = ft_strdup(line);
+    if (!config->ids[index].path)
+        return 1;
+    if(i)
+        (*i)++;
+    
+    return 0;
 }
 
 int pars_rgb(char *line , int *rgb)

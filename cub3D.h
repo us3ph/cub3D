@@ -13,6 +13,12 @@
 # include <limits.h>
 # include <unistd.h>
 
+typedef struct s_counters
+{
+    int floor_count;
+    int ceiling_count;
+    int i;
+}   t_counters;
 
 typedef struct s_ppos
 {
@@ -45,6 +51,9 @@ typedef struct s_game
     t_config *config;
 }  t_game;
 
+
+
+
 char	**ft_split(char const *s, char c);
 int read_map(char *file, t_game *game);
 int	check_map_extention(char *str);
@@ -53,7 +62,8 @@ int	check_map_extention(char *str);
 void err(char *str);
 int check_map_chars(char **map);
 int get_map_height(char **map);
-void free_map(char **map);
+// void free_map(char **map);
+void free_map(t_game *game);
 void cleanup_game(t_game *game);
 int	check_map_wall(t_game *game);
 int	ft_strncmp(const char *str1, const char *str2, size_t n);
@@ -61,7 +71,7 @@ int ft_strcmp(const char *s1, const char *s2);
 char *ft_strncpy(char *dest, const char *src, int n);
 int check_map_elem(t_game *game);
 int	ft_atoi(const char *str);
-int check_config_dup(t_game *game);
+int check_config_dup(t_config *config);
 int pars_textures( char *line, int *j, t_config *config, const char *id);
 void	*ft_memset(void *str, int c, size_t n);
 int check_map_lines(t_game *game);
@@ -80,4 +90,6 @@ int horizonal(char *row, int j, int row_len);
 
 
 int store_and_validat_map(char *file, t_game *game);
+int handle_floor_color(char *line, t_config *config, int *floor_count);
+int handle_ceiling_color(char *line, t_config *config, int *ceiling_count);
 #endif
