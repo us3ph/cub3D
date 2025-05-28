@@ -39,11 +39,6 @@ int handle_floor_color(char *line, t_config *config, int *floor_count)
         err("Error\nduplicate identifier found\n");
         exit(1);
     }
-    // if (!line || line[0] != 'F')
-    // {
-    //     err("Error\nmissing or invalid texture\n");
-    //     exit(1);
-    // }
     if (pars_rgb(line + 2, config->floor_rgb))
     {
         err("Error\ninvalid floor color format\n");
@@ -60,11 +55,6 @@ int handle_ceiling_color(char *line, t_config *config, int *ceiling_count)
         err("Error\nduplicate identifier found\n");
         exit(1);
     }
-    // if (!line || line[0] != 'C')
-    // {
-    //     err("Error\nmissing or invalid texture\n");
-    //     exit(1);
-    // }
     if (pars_rgb(line + 2, config->ceiling_rgb))
     {
         err("Error\ninvalid ceiling color format\n");
@@ -174,7 +164,6 @@ int preprocess_map_file(char *file, t_game *game)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (-1);
-    printf("map start line %d\n", game->map_start_line);
 	while(i < game->map_start_line)
 	{
 		line = get_next_line(fd);
@@ -187,15 +176,9 @@ int preprocess_map_file(char *file, t_game *game)
 		line = get_next_line(fd);
 		if(!line)
 			break;
-        // if(line[0] == '\n')
-        // {
-        //     free(line);
-        //     break;
-        // }
 		map_lines++;
 		free(line);
 	}
-    printf("map lines in perocess map%d\n",map_lines);
 	game->map_lines = map_lines;
 	close(fd);
 	return(0);
@@ -205,7 +188,6 @@ int store_and_validat_map(char *file, t_game *game)
 {
 	char *skip;
 	char **map = NULL;
-	// char *line;
 	int fd;
 	int i;
 
@@ -225,20 +207,16 @@ int store_and_validat_map(char *file, t_game *game)
 	map = malloc(sizeof(char *) * (game->map_lines + 1));
 	if(!map)
 		return(close(fd),1);
-    int y = i;
 	i = 0;
 	while (1)
 	{
-
 		skip = get_next_line(fd);
-        printf("im tijn this line %s",skip);
 		if (!skip)
 			break;
 		if(skip[0] == '\n')
 		{
             free(skip);
-            printf("i=[%d] y[%d] . mapline[%d]\n",i,y,game->map_lines);
-            if(i < game->map_lines)
+            if(i < game->map_lines - 1)
             {
                 while (i > 0)
                     free(map[--i]);
@@ -249,7 +227,6 @@ int store_and_validat_map(char *file, t_game *game)
 		}
 		map[i] = skip;
 		i++;
-        // y++;
 	}
 	map[i] = NULL;
 	game->map = map;
