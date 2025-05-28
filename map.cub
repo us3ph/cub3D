@@ -1,11 +1,12 @@
-C 2,153,25
 
 
 NO textures/grey.xpm
 EA textures/wood.xpm
 SO textures/brick.xpm
 WE textures/grey.xpm
+
 F 34,13,3
+C 2,153,25
 
 
 
