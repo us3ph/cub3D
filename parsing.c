@@ -12,7 +12,7 @@
 //     return(0);
 // }
 
-// Helper function to get the correct index for texture type
+//function to get the correct index for texture type
 int get_texture_index(const char *id)
 {
     if (ft_strcmp(id, "NO") == 0) return 0;
@@ -23,7 +23,7 @@ int get_texture_index(const char *id)
 }
 
 // Fixed pars_textures function
-int pars_textures(char *line, int *i, t_config *config, const char *id)
+int pars_textures(char *line, t_config *config, const char *id)
 {
     int index;
 
@@ -31,7 +31,7 @@ int pars_textures(char *line, int *i, t_config *config, const char *id)
     if (index == -1)
         return 1;
     
-    // Check if this texture type already exists
+    //check if this texture type already exists
     if (config->ids[index].id[0] != '\0')
     {
         err("Error\nDuplicate texture identifier found\n");
@@ -45,9 +45,6 @@ int pars_textures(char *line, int *i, t_config *config, const char *id)
     config->ids[index].path = ft_strdup(line);
     if (!config->ids[index].path)
         return 1;
-    if(i)
-        (*i)++;
-    
     return 0;
 }
 
@@ -84,61 +81,4 @@ int pars_rgb(char *line , int *rgb)
     free_split(split);
     return(0);
 }
-
-// Helper function to trim spaces/tabs from start and end
-// char *ft_strtrim_spaces(char *str)
-// {
-//     int start = 0;
-//     int end = ft_strlen(str) - 1;
-
-//     while (str[start] && (str[start] == ' ' || str[start] == '\t'))
-//         start++;
-//     while (end >= start && (str[end] == ' ' || str[end] == '\t'))
-//         end--;
-
-//     return ft_substr(str, start, end - start + 1);
-// }
-
-// int pars_rgb(char *line, int *rgb)
-// {
-//     int i;
-//     char **split;
-//     char *trimmed;
-
-//     printf("Parsing RGB from line: '%s'\n", line);
-
-//     if (count_comma(line) != 2)
-//         return (1);
-
-//     split = ft_split(line, ',');
-//     if (!split)
-//         return (1);
-
-//     i = 0;
-//     while (split[i])
-//     {
-//         trimmed = ft_strtrim_spaces(split[i]);
-//         if (!trimmed)
-//             return (free_split(split), 1);
-
-//         if (ft_isdigit_str(trimmed))
-//         {
-//             free(trimmed);
-//             return (free_split(split), 1);
-//         }
-
-//         rgb[i] = ft_atoi(trimmed);
-//         free(trimmed);
-
-//         if (rgb[i] < 0 || rgb[i] > 255)
-//             return (free_split(split), 1);
-
-//         printf("rgb[%d] = %d\n", i, rgb[i]);  // print inside the loop for each component
-
-//         i++;
-//     }
-
-//     free_split(split);
-//     return (0);
-// }
 

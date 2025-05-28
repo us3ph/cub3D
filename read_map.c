@@ -39,6 +39,11 @@ int handle_floor_color(char *line, t_config *config, int *floor_count)
         err("Error\nduplicate identifier found\n");
         exit(1);
     }
+    // if (!line || line[0] != 'F')
+    // {
+    //     err("Error\nmissing or invalid texture\n");
+    //     exit(1);
+    // }
     if (pars_rgb(line + 2, config->floor_rgb))
     {
         err("Error\ninvalid floor color format\n");
@@ -55,6 +60,11 @@ int handle_ceiling_color(char *line, t_config *config, int *ceiling_count)
         err("Error\nduplicate identifier found\n");
         exit(1);
     }
+    // if (!line || line[0] != 'C')
+    // {
+    //     err("Error\nmissing or invalid texture\n");
+    //     exit(1);
+    // }
     if (pars_rgb(line + 2, config->ceiling_rgb))
     {
         err("Error\ninvalid ceiling color format\n");
@@ -63,18 +73,15 @@ int handle_ceiling_color(char *line, t_config *config, int *ceiling_count)
     return (0);
 }
 
-int process_texture_line(char *line, t_game *game, int *i)
+int process_texture_line(char *line, t_game *game)
 {
     const char *id;
     
     id = get_texture_id(line);
     if (id)
     {
-        if (pars_textures(line + 2, i, game->config, id))
-        {
-            err("Error\ninvalid texture format\n");
+        if (pars_textures(line + 2, game->config, id))
             return (1);
-        }
     }
     return (0);
 }
@@ -82,11 +89,16 @@ int process_texture_line(char *line, t_game *game, int *i)
 int process_config_line(char *line, t_game *game, t_counters *counters) 
 {
     if (is_texture_line(line))
-        return (process_texture_line(line, game, &counters->i));
+        return (process_texture_line(line, game));
     else if (!ft_strncmp(line, "F ", 2))
         return (handle_floor_color(line, game->config, &counters->floor_count));
     else if (!ft_strncmp(line, "C ", 2))
         return (handle_ceiling_color(line, game->config, &counters->ceiling_count));
+    else if (ft_isalpha(line[0]))  // Add this line
+    {
+        err("Error\nmissing or invalid texture\n");
+        exit(1);
+    }
     else
         return (2);
     return (0);
@@ -133,7 +145,6 @@ int read_config_section(int fd, t_game *game)
     t_counters counters;
     int result;
 
-    counters.i = 0;
     counters.floor_count = 0;
     counters.ceiling_count = 0;
     while (1)
@@ -213,11 +224,15 @@ int store_and_validat_map(char *file, t_game *game)
 			break;
 		if(line[0] == '\n')
 		{
-			free(line);
-			while (i > 0)
-				free(map[--i]);
-			free(map);
-			return(close(fd),1);
+            free(line);
+            if(i < game->map_lines)
+            {
+                while (i > 0)
+                    free(map[--i]);
+                free(map);
+                return(close(fd),1);
+            }
+            continue;
 		}
 		map[i] = line;
 		i++;
@@ -237,20 +252,18 @@ int read_map(char *file, t_game *game)
     fd = open(file, O_RDONLY);
     if (fd < 0)
     {
-        err("Error\nCannot open map file\n");
+        err("Error\ncannot open map file\n");
         exit(1);
     }
     if (init_game_config(game))
         exit(1); 
     if (read_config_section(fd, game))
         return (1);
-    if (check_config_dup(game->config))
-        cleanup_game(game), exit(1);
     if (validate_textures(game->config))
         cleanup_game(game), exit(1);
     if (store_and_validat_map(file, game))
     {
-        err("Error\nMap validation failed\n");
+        err("Error\nmap not valid\n");
         exit(1);
     }
     return (0);

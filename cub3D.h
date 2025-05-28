@@ -17,7 +17,6 @@ typedef struct s_counters
 {
     int floor_count;
     int ceiling_count;
-    int i;
 }   t_counters;
 
 typedef struct s_ppos
@@ -46,7 +45,6 @@ typedef struct s_game
     int height;
     int width;
     char **map;
-    char **hmap;
     t_ppos *player_pos;
     t_config *config;
 }  t_game;
@@ -72,7 +70,8 @@ char *ft_strncpy(char *dest, const char *src, int n);
 int check_map_elem(t_game *game);
 int	ft_atoi(const char *str);
 int check_config_dup(t_config *config);
-int pars_textures( char *line, int *j, t_config *config, const char *id);
+// int pars_textures( char *line, int *j, t_config *config, const char *id);
+int pars_textures(char *line, t_config *config, const char *id);
 void	*ft_memset(void *str, int c, size_t n);
 int check_map_lines(t_game *game);
 int get_row_len(t_game *game);

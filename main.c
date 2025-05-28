@@ -16,6 +16,7 @@ int main(int argc, char **argv)
     if(read_map(argv[1],&game))
         return err("Error\n"),err("unable to read map"), cleanup_game(&game), 1;
 
+    // printf("id: %s\npath: %s\n", game.config->ids[2].id, game.config->ids[2].path);
 
     // if(check_map_elem(&game))
     //     return err("Error\n"), err("invalid map config"), cleanup_game(&game), 1;
