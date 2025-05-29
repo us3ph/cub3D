@@ -1,26 +1,26 @@
 #include "cub3D.h"
 
-void convert_space_to_zero(char **map)
+void convert_space_to_zero(t_game *game)
 {
     int i;
     int j;
     int row_len;
     int map_height;
 
-    map_height = get_map_height(map);
+    map_height = get_map_height(game->map);
     i = 0;
-    while(map[i])
+    while(game->map[i])
     {
         j = 0;
-        row_len = ft_strlen(map[i]);
+        row_len = ft_strlen(game->map[i]);
         while(j < row_len)
         {
-            if(map[i][j] == ' ')
+            if(game->map[i][j] == ' ')
             {
-                if(horizonal(map[i], j, row_len))
-                    map[i][j] = '0';
-                else if(vertical(map, i, j, map_height))
-                    map[i][j] = '0';
+                if(horizonal(game->map[i], j, row_len))
+                    game->map[i][j] = '0';
+                else if(vertical(game->map, i, j, map_height))
+                    game->map[i][j] = '0';
             }
             j++;
         }
@@ -51,5 +51,5 @@ int horizonal(char *row, int j, int row_len)
 
 int is_valid_char(char c)
 {
-    return(c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ');
+    return(c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ' || c == '\n');
 }

@@ -85,21 +85,24 @@ int	check_map_wall(t_game *game)
 	return (0);
 }
 
-int validate_map_char(char **map)
+int validate_map_char(t_game *game)
 {
     int i;
     int j;
     int row_len;
 
     i = 0;
-    while(map[i])
+    while(game->map[i])
     {
         j = 0;
-        row_len = ft_strlen(map[i]);
+        row_len = ft_strlen(game->map[i]);
         while(j < row_len)
         {
-            if(!is_valid_char(map[i][j]))
+            if(!is_valid_char(game->map[i][j]))
+			{
+				printf("here3\n");
                 return(1);
+			}
             j++;
         }
         i++;
@@ -108,44 +111,17 @@ int validate_map_char(char **map)
 }
 
 
-int check_map_chars(char **map)
+int check_map_chars(t_game *game)
 {
     int player_count;
 
-    if(!map || !map[0])
+    if(!game->map || !game->map[0])
         return(1);
-    if(validate_map_char(map))
+    if(validate_map_char(game))
         return(1);
-    convert_space_to_zero(map);
-    player_count = count_player(map);
+    convert_space_to_zero(game);
+    player_count = count_player(game->map);
     if(player_count != 1)
         return(1);
     return (0);
-}
-
-int check_config_dup(t_config *config)
-{
-    int i;
-    int j;
-    
-    i = 0;
-    while(i < 4)
-    {
-        if(config->ids[i].id[0] != '\0')
-        {
-            j = i + 1;
-            while(j < 4)
-            {
-                if(config->ids[j].id[0] != '\0' && 
-                   ft_strcmp(config->ids[i].id, config->ids[j].id) == 0)
-                {
-                    err("Error\nduplicate texture identifier\n");
-                    return(1);
-                }
-                j++;
-            }
-        }
-        i++;
-    }
-    return(0);
 }
