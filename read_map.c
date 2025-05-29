@@ -184,56 +184,80 @@ int preprocess_map_file(char *file, t_game *game)
 	return(0);
 
 }
+
 int store_and_validat_map(char *file, t_game *game)
 {
-	char *skip;
-	char **map = NULL;
-	int fd;
-	int i;
+    char *line;
+    char **map = NULL;
+    int fd;
+    int i;
+    int map_index;
+    int j;
 
-	i = 0;
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (-1);
-	while(1)
-	{
-		skip = get_next_line(fd);
-        if (i >= game->map_start_line)
+    fd = open(file, O_RDONLY);
+    if (fd < 0)
+        return (-1);
+
+    // skip lines until map starts
+    i = 0;
+    while (i < game->map_start_line)
+    {
+        line = get_next_line(fd);
+        if (!line)
+            return (close(fd), -1);
+        free(line);
+        i++;
+    }
+
+    preprocess_map_file(file, game);
+    
+    map = malloc(sizeof(char *) * (game->map_lines + 1));
+    if (!map)
+        return (close(fd), 1);
+
+    // init all pointers to NULL
+    j = 0;
+    while (j <= game->map_lines)
+    {
+        map[j] = NULL;
+        j++;
+    }
+
+    map_index = 0;
+    while (map_index < game->map_lines)
+    {
+        line = get_next_line(fd);
+        if (!line)
             break;
-		free(skip);
-		i++;
-	}
-	preprocess_map_file(file,game);
-	map = malloc(sizeof(char *) * (game->map_lines + 1));
-	if(!map)
-		return(close(fd),1);
-	i = 0;
-	while (1)
-	{
-		skip = get_next_line(fd);
-		if (!skip)
-			break;
-		if(skip[0] == '\n')
-		{
-            free(skip);
-            if(i < game->map_lines - 1)
-            {
-                while (i > 0)
-                    free(map[--i]);
-                free(map);
-                return(close(fd),1);
-            }
-            continue;
-		}
-		map[i] = skip;
-		i++;
-	}
-	map[i] = NULL;
-	game->map = map;
-	close(fd);
-	return(0);
-}
 
+        // check for empty line in middle of map
+        if (line[0] == '\n')
+        {
+            free(line);
+            if (map_index < game->map_lines)  // empty line in middle
+            {
+                // Free allocated memory using while loop
+                j = 0;
+                while (j < map_index)
+                {
+                    free(map[j]);
+                    j++;
+                }
+                free(map);
+                return (close(fd), 1);
+            }
+            continue; 
+        }
+
+        map[map_index] = line;
+        map_index++;
+    }
+
+    map[map_index] = NULL;
+    game->map = map;
+    close(fd);
+    return (0);
+}
 
 int read_map(char *file, t_game *game)
 {
@@ -254,7 +278,7 @@ int read_map(char *file, t_game *game)
         cleanup_game(game), exit(1);
     if (store_and_validat_map(file, game))
     {
-        err("Error\nmap not valid\n");
+        err("Error\ninvalid map\n");
         exit(1);
     }
     return (0);

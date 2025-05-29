@@ -16,12 +16,11 @@ int main(int argc, char **argv)
     if(read_map(argv[1],&game))
         return err("Error\n"),err("unable to read map"), cleanup_game(&game), 1;
 
-    // printf("id: %s\npath: %s\n", game.config->ids[2].id, game.config->ids[2].path);
-
-    // if(check_map_elem(&game))
-    //     return err("Error\n"), err("invalid map config"), cleanup_game(&game), 1;
-    // if(check_map_wall(&game))
-    //     return err("Error\n"), err("map wall not closed"), cleanup_game(&game), 1;
+    // printf("game map[0]%s\n", game.map[0]);
+    // printf("%d\n%d\n%d\n", game.config->floor_rgb[0], game.config->floor_rgb[1], game.config->floor_rgb[2]);
+    
+    if(check_map_wall(&game))
+        return err("Error\n"), err("map wall not closed"), cleanup_game(&game), 1;
     // if(check_map_chars(game.map))
     //     return err("Error\n"), err("map characters not correct"), cleanup_game(&game), 1;
     cleanup_game(&game);

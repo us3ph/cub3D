@@ -14,70 +14,76 @@ int	check_map_extention(char *str)
 	}
 	return (0);
 }
-
 int	check_map_wall(t_game *game)
 {
 	int	i;
 	int	j;
-	int	raw_len;
-    int map_height;
+	int	row_len;
+	int	map_height;
 
-	i = 0;
-	if(!game || !game->map[0])
-	    return(1);
-	raw_len = get_row_len(game);
-	if (raw_len == 0)
+	if (!game || !game->map || !game->map[0])
 		return (1);
+	
+	map_height = get_map_height(game->map);
+	if (map_height < 3)
+			return (1);
+	// check first row
+    i = 0;
+	row_len = ft_strlen(game->map[i]);
+	if (row_len == 0)
+			return (1);
 	j = 0;
-	while (j < raw_len) // check first row
+	while (j < row_len)
 	{
-        if(game->map[0][j] == ' ')
-        {
-            j++;
-            continue;
-        }
-		if(game->map[0][j] != '1')
+		if (game->map[i][j] == ' ' || game->map[i][j] == '\n')
+		{
+			j++;
+			continue;
+		}
+		if (game->map[i][j] != '1')
 			return (1);
 		j++;
 	}
-	map_height = get_map_height(&game->map[i]);
-    i = 1;
-	while (i < map_height -1)   // check midel rows
+	// check middle rows
+	i = 1;
+	while (i < map_height - 1)
 	{
-		raw_len = ft_strlen(game->map[i]);
-        if(raw_len == 0)
-            return(1);
-        j = 0;
-        while(j < raw_len && game->map[i][j] == ' ')  // check left wall
-            j++;
-        if(j >= raw_len || game->map[i][j] != '1')
-            return(1);
-        j = raw_len -1;
-        while(j >= 0 && game->map[i][j] == ' ') // check right wall
-            j--;
-        if(j < 0 || game->map[i][j] != '1')
-            return(1);
-        i++;
+		row_len = ft_strlen(game->map[i]);
+		if (row_len == 0)
+			return (1);
+		j = 0;
+		while (j < row_len && (game->map[i][j] == ' ' || game->map[i][j] == '\n'))
+			j++;
+		if (j >= row_len || game->map[i][j] != '1')
+			return (1);
+		j = row_len - 1;
+		while (j >= 0 && (game->map[i][j] == ' ' || game->map[i][j] == '\n'))
+			j--;
+		if (j < 0 || game->map[i][j] != '1')
+			return (1);
+		i++;
 	}
-    i = map_height -1;
-	raw_len = ft_strlen(game->map[i]);  // check last row
-	if (raw_len == 0)
-        return (1);
+	// check last row
+	i = map_height - 1;
+	if (!game->map[i])
+		return (1);
+	row_len = ft_strlen(game->map[i]);
+	if (row_len == 0)
+		return (1);
 	j = 0;
-	while (j < raw_len)
+	while (j < row_len)
 	{
-        if(game->map[i][j] == ' ')
-        {
-            j++;
-            continue;
-        }
+		if (game->map[i][j] == ' ' || game->map[i][j] == '\n')
+		{
+			j++;
+			continue;
+		}
 		if (game->map[i][j] != '1')
 			return (1);
 		j++;
 	}
 	return (0);
 }
-
 
 int validate_map_char(char **map)
 {
