@@ -42,10 +42,10 @@ typedef struct s_game
 {
     int map_lines;
     int map_start_line;
-    int height;
+    int map_height;
     int width;
     char **map;
-    t_ppos *player_pos;
+    t_ppos player_pos;
     t_config *config;
 }  t_game;
 
