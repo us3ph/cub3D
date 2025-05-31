@@ -110,18 +110,71 @@ int validate_map_char(t_game *game)
     return(0);
 }
 
+int is_space_valid(char **map, int i, int j, int map_height)
+{
+    int row_len;
+    int prev_row_len;
+    int next_row_len;
+	(void)map_height;
+
+    row_len = ft_strlen(map[i]);
+    // check horizontal neighbors
+    if (map[i][j - 1] == ' ' || map[i][j + 1] == ' ')
+        return (0);
+    
+    // check vertical neighbors
+    prev_row_len = ft_strlen(map[i - 1]);
+    if (j >= prev_row_len || (map[i - 1][j] == ' '))
+        return (0);
+        
+    next_row_len = ft_strlen(map[i + 1]);
+    if (j >= next_row_len || (map[i + 1][j] == ' '))
+        return (0);
+    
+    return (1); // aways return 1 if valid space
+}
+
+int validate_spaces(t_game *game)
+{
+    int i;
+    int j;
+    int row_len;
+    int map_height;
+    
+    map_height = get_map_height(game->map);
+    i = 0;
+    while (game->map[i])
+    {
+        j = 0;
+        row_len = ft_strlen(game->map[i]);
+        while (j < row_len && j != '\n')
+        {
+            if (game->map[i][j] == '0' || game->map[i][j] == 'N' || game->map[i][j] == 'S' || game->map[i][j] == 'E' || game->map[i][j] == 'W' )
+            {
+                if (!is_space_valid(game->map, i, j, map_height))
+                    return (1);
+            }
+            j++;
+        }
+        i++;
+    }
+    return (0);
+}
 
 int check_map_chars(t_game *game)
 {
     int player_count;
-
-    if(!game->map || !game->map[0])
-        return(1);
-    if(validate_map_char(game))
-        return(1);
-    convert_space_to_zero(game);
+    
+    if (!game->map || !game->map[0])
+        return (1);
+    if (validate_map_char(game))
+        return (1);
+    if (validate_spaces(game))
+        return (1);
     player_count = count_player(game->map);
-    if(player_count != 1)
-        return(1);
+    if (player_count != 1)
+        return (1);
     return (0);
 }
+
+
