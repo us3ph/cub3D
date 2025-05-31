@@ -182,7 +182,6 @@ int preprocess_map_file(char *file, t_game *game)
 	game->map_lines = map_lines;
 	close(fd);
 	return(0);
-
 }
 
 int store_and_validat_map(char *file, t_game *game)
@@ -197,7 +196,6 @@ int store_and_validat_map(char *file, t_game *game)
     fd = open(file, O_RDONLY);
     if (fd < 0)
         return (-1);
-
     // skip lines until map starts
     i = 0;
     while (i < game->map_start_line)

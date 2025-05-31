@@ -14,75 +14,84 @@ int	check_map_extention(char *str)
 	}
 	return (0);
 }
-int	check_map_wall(t_game *game)
+
+
+
+int	check_row_walls(char *row)  // func to check first and last row 
 {
-	int	i;
 	int	j;
 	int	row_len;
-	int	map_height;
 
-	if (!game || !game->map || !game->map[0])
+	if (!row)
 		return (1);
-	
-	map_height = get_map_height(game->map);
-	if (map_height < 3)
-			return (1);
-	// check first row
-    i = 0;
-	row_len = ft_strlen(game->map[i]);
-	if (row_len == 0)
-			return (1);
-	j = 0;
-	while (j < row_len)
-	{
-		if (game->map[i][j] == ' ' || game->map[i][j] == '\n')
-		{
-			j++;
-			continue;
-		}
-		if (game->map[i][j] != '1')
-			return (1);
-		j++;
-	}
-	// check middle rows
-	i = 1;
-	while (i < map_height - 1)
-	{
-		row_len = ft_strlen(game->map[i]);
-		if (row_len == 0)
-			return (1);
-		j = 0;
-		while (j < row_len && (game->map[i][j] == ' ' || game->map[i][j] == '\n'))
-			j++;
-		if (j >= row_len || game->map[i][j] != '1')
-			return (1);
-		j = row_len - 1;
-		while (j >= 0 && (game->map[i][j] == ' ' || game->map[i][j] == '\n'))
-			j--;
-		if (j < 0 || game->map[i][j] != '1')
-			return (1);
-		i++;
-	}
-	// check last row
-	i = map_height - 1;
-	if (!game->map[i])
-		return (1);
-	row_len = ft_strlen(game->map[i]);
+	row_len = ft_strlen(row);
 	if (row_len == 0)
 		return (1);
 	j = 0;
 	while (j < row_len)
 	{
-		if (game->map[i][j] == ' ' || game->map[i][j] == '\n')
+		if (row[j] == ' ' || row[j] == '\n')
 		{
 			j++;
 			continue;
 		}
-		if (game->map[i][j] != '1')
+		if (row[j] != '1')
 			return (1);
 		j++;
 	}
 	return (0);
+}
+
+int	check_middle_row_walls(char *row)  // check middle rows
+{
+	int	j;
+	int	row_len;
+
+	if (!row)
+		return (1);
+	row_len = ft_strlen(row);
+	if (row_len == 0)
+		return (1);
+	j = 0;
+	while (j < row_len && (row[j] == ' ' || row[j] == '\n'))
+		j++;
+	if (j >= row_len || row[j] != '1')
+		return (1);
+	j = row_len - 1;
+	while (j >= 0 && (row[j] == ' ' || row[j] == '\n'))
+		j--;
+	if (j < 0 || row[j] != '1')
+		return (1);
+	return (0);
+}
+
+int	check_map_wall(t_game *game)
+{
+	int	i;
+	int	map_height;
+
+	if (!game || !game->map || !game->map[0])
+		return (1);
+	map_height = get_map_height(game->map);
+	if (map_height < 3)
+		return (1);
+	if (check_row_walls(game->map[0]))
+		return (1);
+	i = 1;
+	while (i < map_height - 1)
+	{
+		if (check_middle_row_walls(game->map[i]))
+			return (1);
+		i++;
+	}
+	if (check_row_walls(game->map[map_height - 1]))
+		return (1);
+	return (0);
+}
+
+int is_valid_char(char c)
+{
+    return(c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == ' ' || c == '\n');
 }
 
 int validate_map_char(t_game *game)
@@ -115,7 +124,6 @@ int is_space_valid(char **map, int i, int j, int map_height)
     int row_len;
     int prev_row_len;
     int next_row_len;
-	// (void)map_height;
 
     row_len = ft_strlen(map[i]);
     // check horizontal neighbors

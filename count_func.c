@@ -38,36 +38,36 @@ int count_comma(char *str)
     return(comma);
 }
 
-int count_lines_bfr_map(char **hmap)
-{
-    int i;
+// int count_lines_bfr_map(char **hmap)
+// {
+//     int i;
 
-    i = 0;
-    while(hmap[i] && hmap[i][0] != '1')
-    {
-        i++;
-    }
-    return(i);
-}
+//     i = 0;
+//     while(hmap[i] && hmap[i][0] != '1')
+//     {
+//         i++;
+//     }
+//     return(i);
+// }
 
-int get_row_len(t_game *game)
-{
+// int get_row_len(t_game *game)
+// {
 
-    size_t j;
-    int row_len;
+//     size_t j;
+//     int row_len;
 
-    row_len = 0;
-     j = 0;
-    while (j < ft_strlen(game->map[0]))
-    {
-        if(game->map[0][j] == ' ')
-        {
-            j++;
-            continue;
-        }
-        if(game->map[0][j] == '1' || game->map[0][j] == '0')
-            row_len++;
-        j++;
-    }
-    return(row_len);
-}
+//     row_len = 0;
+//      j = 0;
+//     while (j < ft_strlen(game->map[0]))
+//     {
+//         if(game->map[0][j] == ' ')
+//         {
+//             j++;
+//             continue;
+//         }
+//         if(game->map[0][j] == '1' || game->map[0][j] == '0')
+//             row_len++;
+//         j++;
+//     }
+//     return(row_len);
+// }
