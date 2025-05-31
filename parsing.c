@@ -1,17 +1,5 @@
 #include "cub3D.h"
 
-// int pars_textures( char *line, int *j, t_config *config, const char *id)
-// {
-//     ft_strncpy(config->ids[*j].id, id, 2);
-//     config->ids[*j].id[2] = '\0';
-//     while(*line == ' ' || *line == '\t')
-//         line++;
-//     config->ids[*j].path = ft_strdup(line);
-//     if(j)
-//         (*j)++;
-//     return(0);
-// }
-
 //function to get the correct index for texture type
 int get_texture_index(const char *id)
 {
@@ -22,7 +10,6 @@ int get_texture_index(const char *id)
     return -1;
 }
 
-// Fixed pars_textures function
 int pars_textures(char *line, t_config *config, const char *id)
 {
     int index;
@@ -51,7 +38,6 @@ int pars_textures(char *line, t_config *config, const char *id)
 int pars_rgb(char *line , int *rgb)
 {
     int i;
-    // int j;
     char **split;
 
     i = 0;
