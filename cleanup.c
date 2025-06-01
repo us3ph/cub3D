@@ -52,20 +52,17 @@ void free_split(char **split)
     free(split);
 }
 
-void err(char *str)
+void free_this_map(char **map, int map_index)
 {
-    while (*str)
-        write(2, str++, 1);
-}
+    int j;
 
-int get_map_height(char **map)
-{
-    int height;
-
-    height = 0;
-    while (map[height])
-        height++;
-    return (height);
+    j = 0;
+    while (j < map_index)
+    {
+        free(map[j]);
+        j++;
+    }
+    free(map);
 }
 
 void cleanup_game(t_game *game)

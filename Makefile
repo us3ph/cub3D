@@ -11,7 +11,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDE = -I$(LIBFT_DIR)
 
 SRC = get_next_line.c get_next_line_utils.c read_map.c main.c utils.c check_func.c\
-	  cleanup.c parsing.c count_func.c\
+	  cleanup.c parsing.c count_func.c validate_func.c process_func.c store_func.c\
 
 OBJ = $(SRC:.c=.o)
 

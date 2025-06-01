@@ -46,63 +46,19 @@ char *ft_strncpy(char *dest, const char *src, int n)
     }
 	return(dest);
 }
-// int	ft_atoi(const char *str)
-// {
-// 	int		i;
-// 	int		signe;
-// 	long	result;
-
-// 	i = 0;
-// 	signe = 1;
-// 	result = 0;
-// 	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
-// 		i++;
-// 	if (str[i] == '+' || str[i] == '-')
-// 	{
-// 		if (str[i] == '-')
-// 			signe *= -1;
-// 		i++;
-// 	}
-// 	while (str[i] >= '0' && str[i] <= '9')
-// 	{
-// 		result = result * 10 + str[i] - '0';
-// 		if ((signe == 1 && result > INT_MAX) || (signe == -1 && result
-// 				* signe < INT_MIN))
-// 			return (-1);
-// 		i++;
-// 	}
-// 	return (result * signe);
-// }
-// void	*ft_memset(void *str, int c, size_t n)
-// {
-// 	size_t			i;
-// 	char			*s;
-// 	unsigned char	ch;
-
-// 	s = (char *)str;
-// 	ch = (unsigned char)c;
-// 	i = 0;
-// 	while (i < n)
-// 	{
-// 		s[i] = ch;
-// 		i++;
-// 	}
-// 	return (str);
-// }
-
-// int ft_isdigit(char *str)
-// {
-
-//     int i;
-
-//     i = 0;
-//     while(str[i])
-//     {
-//         while(str[i] == ' ' || str[i] == '\t')
-//             i++;
-//         if (str[i] < 48 || str[i] > 57)
-// 		    return (1);
-//         i++;
-//     }
-//     return(0);
-// }
+int is_texture_line(char *line)
+{
+    return (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "SO ", 3) || !ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "WE ", 3));
+}
+const char *get_texture_id(const char *line)
+{
+    if (ft_strncmp(line, "NO", 2) == 0)
+        return "NO";
+    if (ft_strncmp(line, "SO", 2) == 0)
+        return "SO";
+    if (ft_strncmp(line, "WE", 2) == 0)
+        return "WE";
+    if (ft_strncmp(line, "EA", 2) == 0)
+        return "EA";
+    return NULL;
+}

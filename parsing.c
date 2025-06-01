@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ytabia <ytabia@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/01 19:58:04 by ytabia            #+#    #+#             */
+/*   Updated: 2025/06/01 20:56:22 by ytabia           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
-// function to get the correct index for texture type
 int get_texture_index(const char *id)
 {
     if (ft_strcmp(id, "NO") == 0)
@@ -75,8 +86,8 @@ int parsing(int argc, char **argv, t_game *game)
 {
     if (argc != 2)
         return (err("Error:\nnumber arguments not correct\n"), 1);
-    if (check_map_extention(argv[1]))
-        return (err("Error:\nmap extention not correct\n"), 1);
+    if (check_map_extension(argv[1]))
+        return (err("Error:\nmap extension not correct\n"), 1);
     if (read_map(argv[1], game))
         return (err("Error:\nunable to read map\n"), cleanup_game(game), 1);
     if (check_map_wall(game))
