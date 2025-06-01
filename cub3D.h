@@ -50,8 +50,7 @@ typedef struct s_game
 }  t_game;
 
 
-
-
+int	parsing(int argc, char **argv, t_game *game);
 int read_map(char *file, t_game *game);
 int	check_map_extention(char *str);
 int check_map_chars(t_game *game);
