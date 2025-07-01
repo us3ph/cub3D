@@ -45,7 +45,7 @@ int pars_textures(char *line, t_config *config, const char *id)
     if(!config->ids[index].path)
         return(1);
     extension = ft_strrchr(config->ids[index].path, '.');
-    if(ft_strcmp(extension, ".xpm"))
+    if( !extension || ft_strcmp(extension, ".xpm") != 0)
         err("Error:\ntexture must be .xpm file\n"), exit(1);
     fd = open(config->ids[index].path, O_RDONLY);
     if(fd < 0)
