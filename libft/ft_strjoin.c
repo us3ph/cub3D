@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ytabia <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ytabia <ytabia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 12:07:10 by ytabia            #+#    #+#             */
-/*   Updated: 2024/11/07 18:46:59 by ytabia           ###   ########.fr       */
+/*   Updated: 2025/07/01 19:03:32 by ytabia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		return (NULL);
+		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
 	total_len = ft_strlen(s1) + ft_strlen(s2);

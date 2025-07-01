@@ -6,7 +6,7 @@
 /*   By: ytabia <ytabia@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 19:58:04 by ytabia            #+#    #+#             */
-/*   Updated: 2025/06/01 20:56:22 by ytabia           ###   ########.fr       */
+/*   Updated: 2025/07/01 19:18:43 by ytabia           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ int parsing(int argc, char **argv, t_game *game)
         return (err("Error:\nmap wall not closed\n"), cleanup_game(game), 1);
     if (check_map_chars(game))
         return (err("Error:\nmap characters not correct\n"), cleanup_game(game), 1);
-    cleanup_game(game);
+    // cleanup_game(game);
     return (0);
 }

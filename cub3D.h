@@ -23,6 +23,7 @@ typedef struct s_ppos
 {
     int height;
     int width;
+    char player[2];
 } t_ppos;
 
 typedef struct s_ids

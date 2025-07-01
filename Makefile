@@ -1,6 +1,6 @@
 NAME = cub3D
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 RM = rm -rf
 
 MLX_FLAGS = -L/home/x-hunter/cub3D/minilibix-linux -L/usr/lib -lXext -lX11 -lm -lz
