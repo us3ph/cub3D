@@ -20,5 +20,6 @@ int main(int argc, char **argv)
     if (parsing(argc, argv, &game))
         return (1);
     // continue your part...
-    cleanup_game(&game); // dont forget to clean the map in the end
+
+    cleanup_game(&game); // dont forget to clean the map and config in the end
 }

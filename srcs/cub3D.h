@@ -1,17 +1,30 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-# include "get_next_line.h"
-#include "libft.h"
+#include "../libft/libft.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
-# include <mlx.h>
+// # include <mlx.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <limits.h>
 # include <unistd.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
+# include <fcntl.h>
+# include <stdlib.h>
+# include <unistd.h>
+
+char	*get_next_line(int fd);
+char	*ft_strchr(const char *str, int search_str);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *str);
+size_t	ft_strlen(const char *str);
 
 typedef struct s_counters
 {

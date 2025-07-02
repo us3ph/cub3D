@@ -6,12 +6,12 @@ RM = rm -rf
 MLX_FLAGS = -L/home/x-hunter/cub3D/minilibix-linux -L/usr/lib -lXext -lX11 -lm -lz
 MLX_INCLUDE = -Iminilibx-linux
 
-LIBFT_DIR = libft
+LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDE = -I$(LIBFT_DIR)
 
-SRC = get_next_line.c get_next_line_utils.c read_map.c main.c utils.c check_func.c\
-	  cleanup.c parsing.c count_func.c validate_func.c process_func.c store_func.c\
+SRC = ./srcs/main.c ./gnl/get_next_line.c  ./parsing/read_map.c ./parsing/utils.c ./parsing/check_func.c\
+	  ./parsing/cleanup.c ./parsing/parsing.c ./parsing/count_func.c ./parsing/validate_func.c ./parsing/process_func.c ./parsing/store_func.c\
 
 OBJ = $(SRC:.c=.o)
 
